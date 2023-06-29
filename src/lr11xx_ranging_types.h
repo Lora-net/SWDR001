@@ -1,10 +1,10 @@
-/*!
- * @file      lr11xx_driver_version.h
+/**
+ * @file      lr11xx_ranging_types.h
  *
- * @brief     Placeholder to keep the version of LR11XX driver.
+ * @brief     Ranging driver types for LR11XX
  *
  * The Clear BSD License
- * Copyright Semtech Corporation 2021. All rights reserved.
+ * Copyright Semtech Corporation 2022. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted (subject to the limitations in the disclaimer
@@ -32,8 +32,8 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef LR11XX_DRIVER_VERSION_H
-#define LR11XX_DRIVER_VERSION_H
+#ifndef LR11XX_RANGING_TYPES_H
+#define LR11XX_RANGING_TYPES_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -54,37 +54,29 @@ extern "C" {
  * --- PUBLIC CONSTANTS --------------------------------------------------------
  */
 
-#define LR11XX_DRIVER_VERSION_MAJOR 2
-#define LR11XX_DRIVER_VERSION_MINOR 2
-#define LR11XX_DRIVER_VERSION_PATCH 0
-
 /*
  * -----------------------------------------------------------------------------
  * --- PUBLIC TYPES ------------------------------------------------------------
  */
 
+/**
+ * @brief Ranging result types
+ */
+typedef enum lr11xx_ranging_result_type_e
+{
+    LR11XX_RANGING_RESULT_TYPE_RAW = 0,  ///< Raw distance result
+    LR11XX_RANGING_RESULT_TYPE_RSSI,     ///< Ranging RSSI
+} lr11xx_ranging_result_type_t;
+
 /*
  * -----------------------------------------------------------------------------
- * --- PUBLIC FUNCTIONS PROTOTYPES ---------------------------------------------
+ * --- PUBLIC FUNCTION PROTOTYPES ---------------------------------------------
  */
-
-/*!
- * @brief Compare version information with current ones
- *
- * This macro expands to true boolean value if the version information provided in argument is compatible or
- * retro-compatible with the version of this code base
- */
-#define LR11XX_DRIVER_VERSION_CHECK( x, y, z ) \
-    ( x == LR11XX_DRIVER_VERSION_MAJOR &&      \
-      ( y < LR11XX_DRIVER_VERSION_MINOR ||     \
-        ( y == LR11XX_DRIVER_VERSION_MINOR && z <= LR11XX_DRIVER_VERSION_PATCH ) ) )
-
-const char* lr11xx_driver_version_get_version_string( void );
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif  // LR11XX_DRIVER_VERSION_H
+#endif  // LR11XX_RANGING_TYPES_H
 
 /* --- EOF ------------------------------------------------------------------ */
