@@ -30,14 +30,36 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-include(lr11xx_driver_module.cmake)
-
-target_sources(${LR11XX_DRIVER_MODULE_TARGET}
-  PRIVATE
-  ${LR11XX_DRIVER_MODULE_C_SOURCES}
+add_library(lr11xx_driver STATIC
+    lr11xx_bootloader.c
+    lr11xx_crypto_engine.c
+    lr11xx_driver_version.c
+    lr11xx_lr_fhss.c
+    lr11xx_radio_timings.c
+    lr11xx_radio.c
+    lr11xx_regmem.c
+    lr11xx_rttof.c
+    lr11xx_system.c
 )
 
-target_include_directories(${LR11XX_DRIVER_MODULE_TARGET}
-  PUBLIC
-  ${LR11XX_DRIVER_MODULE_C_INCLUDES}
+if(LR11XX_DRIVER_GEOLOCATION)
+    target_sources(lr11xx_driver PRIVATE
+        lr11xx_gnss.c
+        lr11xx_wifi.c
+    )
+endif()
+
+add_library(lr11xx_driver::lr11xx_driver ALIAS lr11xx_driver)
+    
+target_include_directories(lr11xx_driver PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+    $<INSTALL_INTERFACE:>
+)
+
+install(TARGETS lr11xx_driver
+    EXPORT Lr11xxDriverTargets
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
+    RUNTIME DESTINATION bin
+    INCLUDES DESTINATION include
 )

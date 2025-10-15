@@ -1,6 +1,6 @@
-# @file lr11xx_driver_module.cmake
+# @file
 #
-# @brief Defines CMake source files and include directories for this module
+# @brief CMake library project
 #
 # --- The Clear BSD License ---
 # Copyright Semtech Corporation 2021. All rights reserved.
@@ -30,20 +30,22 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-set(LR11XX_DRIVER_MODULE_C_SOURCES
-  ${CMAKE_CURRENT_LIST_DIR}/lr11xx_bootloader.c
-  ${CMAKE_CURRENT_LIST_DIR}/lr11xx_crypto_engine.c
-  ${CMAKE_CURRENT_LIST_DIR}/lr11xx_driver_version.c
-  ${CMAKE_CURRENT_LIST_DIR}/lr11xx_gnss.c
-  ${CMAKE_CURRENT_LIST_DIR}/lr11xx_lr_fhss.c
-  ${CMAKE_CURRENT_LIST_DIR}/lr11xx_radio.c
-  ${CMAKE_CURRENT_LIST_DIR}/lr11xx_radio_timings.c
-  ${CMAKE_CURRENT_LIST_DIR}/lr11xx_rttof.c
-  ${CMAKE_CURRENT_LIST_DIR}/lr11xx_regmem.c
-  ${CMAKE_CURRENT_LIST_DIR}/lr11xx_system.c
-  ${CMAKE_CURRENT_LIST_DIR}/lr11xx_wifi.c
-  )
+cmake_minimum_required(VERSION 3.25)
 
-set(LR11XX_DRIVER_MODULE_C_INCLUDES
-  ${CMAKE_CURRENT_LIST_DIR}/.
-  )
+project(
+    lr11xx_driver
+    DESCRIPTION "LR11xx driver library"
+    LANGUAGES C
+)
+
+option(LR11XX_DRIVER_GEOLOCATION "Provide LR11xx geolocation APIs for LR1110 and LR1120" ON)
+
+add_subdirectory(src)
+
+install(EXPORT Lr11xxDriverTargets
+    FILE Lr11xxDriverConfig.cmake
+    NAMESPACE lr11xx_driver::
+    DESTINATION lib/cmake/MyLib
+)
+
+export(TARGETS lr11xx_driver NAMESPACE lr11xx_driver:: FILE Lr11xxDriverTargets.cmake)
