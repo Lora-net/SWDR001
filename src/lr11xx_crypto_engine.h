@@ -69,19 +69,6 @@ extern "C" {
  */
 
 /*!
- * @brief Select the crypto element to be used
- *
- * By default, the internal crypto engine is selected. It is not needed to call this command if one plans to use the
- * internal crypto engine.
- *
- * @param [in] context Chip implementation context
- * @param [in] element The type of crypto element to use
- *
- * @returns Operation status
- */
-lr11xx_status_t lr11xx_crypto_select( const void* context, const lr11xx_crypto_element_t element );
-
-/*!
  * @brief Set a key in the previously selected crypto element.
  *
  * @param [in] context Chip implementation context

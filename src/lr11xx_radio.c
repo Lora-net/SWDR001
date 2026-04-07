@@ -1208,10 +1208,17 @@ uint32_t lr11xx_radio_get_lora_bw_in_hz( lr11xx_radio_lora_bw_t bw )
 uint32_t lr11xx_radio_get_lora_time_on_air_in_ms( const lr11xx_radio_pkt_params_lora_t* pkt_p,
                                                   const lr11xx_radio_mod_params_lora_t* mod_p )
 {
-    uint32_t numerator   = 1000U * lr11xx_radio_get_lora_time_on_air_numerator( pkt_p, mod_p );
-    uint32_t denominator = lr11xx_radio_get_lora_bw_in_hz( mod_p->bw );
-    // Perform integral ceil()
-    return ( numerator + denominator - 1 ) / denominator;
+    const uint32_t numerator   = 1000U * lr11xx_radio_get_lora_time_on_air_numerator( pkt_p, mod_p );
+    const uint32_t denominator = lr11xx_radio_get_lora_bw_in_hz( mod_p->bw );
+    if( denominator == 0 )
+    {
+        return 0;
+    }
+    else
+    {
+        // Perform integral ceil()
+        return ( numerator + denominator - 1 ) / denominator;
+    }
 }
 
 uint32_t lr11xx_radio_get_gfsk_time_on_air_numerator( const lr11xx_radio_pkt_params_gfsk_t* pkt_p )

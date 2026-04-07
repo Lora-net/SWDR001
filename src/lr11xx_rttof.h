@@ -189,7 +189,7 @@ int32_t lr11xx_rttof_distance_raw_to_meter( lr11xx_radio_lora_bw_t rttof_bw,
 static inline int8_t lr11xx_rttof_rssi_raw_to_value( const uint8_t raw_rssi_buf[LR11XX_RTTOF_RESULT_LENGTH] )
 {
     // Only the last byte is meaningful
-    return -( int8_t )( raw_rssi_buf[3] >> 1 );
+    return -( int8_t ) ( raw_rssi_buf[3] >> 1 );
 }
 
 #ifdef __cplusplus

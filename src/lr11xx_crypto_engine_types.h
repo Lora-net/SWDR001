@@ -122,15 +122,6 @@ typedef uint8_t lr11xx_crypto_nonce_t[LR11XX_CRYPTO_NONCE_LENGTH];
 typedef uint8_t lr11xx_crypto_param_t[LR11XX_CRYPTO_PARAMETER_LENGTH];
 
 /*!
- * @brief The supported crypto elements
- */
-typedef enum
-{
-    LR11XX_CRYPTO_ELEMENT_CRYPTO_ENGINE  = 0x00,  //!< Internal crypto engine (default)
-    LR11XX_CRYPTO_ELEMENT_SECURE_ELEMENT = 0x01,  //!< External secure element
-} lr11xx_crypto_element_t;
-
-/*!
  * @brief The status returned by the crypto API
  */
 typedef enum

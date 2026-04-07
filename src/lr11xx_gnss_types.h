@@ -70,7 +70,7 @@ extern "C" {
 /*!
  * @brief Size of the almanac of a single satellite when reading
  */
-#define LR11XX_GNSS_SINGLE_ALMANAC_READ_SIZE ( 22 )
+#define LR11XX_GNSS_SINGLE_ALMANAC_READ_SIZE ( 22u )
 
 /*!
  * @brief Size of the almanac of a single satellite when writing

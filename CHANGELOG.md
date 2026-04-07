@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v3.0.0] - 2026-03-12
+
+### Fixed
+
+- Coding style
+- `lr11xx_radio_get_lora_time_on_air_in_ms` returns 0 if the provided LoRa bandwidth is unknown
+
+### Removed
+
+- `lr11xx_regmem_read_mem8`
+- `lr11xx_regmem_write_mem8`
+- `lr11xx_crypto_select` and `lr11xx_crypto_element_t`
+
 ## [v2.7.0] - 2025-04-14
 
 ### Added

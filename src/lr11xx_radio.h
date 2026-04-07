@@ -882,7 +882,7 @@ uint32_t lr11xx_radio_get_lora_bw_in_hz( lr11xx_radio_lora_bw_t bw );
  * @param [in] pkt_p Pointer to a structure holding the LoRa packet parameters
  * @param [in] mod_p Pointer to a structure holding the LoRa modulation parameters
  *
- * @returns Time-on-air value in ms for LoRa transmission
+ * @returns Time-on-air value in ms for LoRa transmission or 0 if the LoRa bandwidth is not known
  */
 uint32_t lr11xx_radio_get_lora_time_on_air_in_ms( const lr11xx_radio_pkt_params_lora_t* pkt_p,
                                                   const lr11xx_radio_mod_params_lora_t* mod_p );

@@ -53,8 +53,6 @@
 #define LR11XX_REGMEM_CLEAR_RXBUFFER_CMD_LENGTH 2
 #define LR11XX_REGMEM_WRITE_REGMEM32_CMD_LENGTH ( 2 + 4 )
 #define LR11XX_REGMEM_READ_REGMEM32_CMD_LENGTH ( 2 + 4 + 1 )
-#define LR11XX_REGMEM_WRITE_MEM8_CMD_LENGTH ( 2 + 4 )
-#define LR11XX_REGMEM_READ_MEM8_CMD_LENGTH ( 2 + 4 + 1 )
 #define LR11XX_REGMEM_WRITE_BUFFER8_CMD_LENGTH ( 2 )
 #define LR11XX_REGMEM_READ_BUFFER8_CMD_LENGTH ( 2 + 2 )
 #define LR11XX_REGMEM_WRITE_REGMEM32_MASK_CMD_LENGTH ( 2 + 4 + 4 + 4 )
@@ -73,8 +71,6 @@ enum
 {
     LR11XX_REGMEM_WRITE_REGMEM32_OC      = 0x0105,
     LR11XX_REGMEM_READ_REGMEM32_OC       = 0x0106,
-    LR11XX_REGMEM_WRITE_MEM8_OC          = 0x0107,
-    LR11XX_REGMEM_READ_MEM8_OC           = 0x0108,
     LR11XX_REGMEM_WRITE_BUFFER8_OC       = 0x0109,
     LR11XX_REGMEM_READ_BUFFER8_OC        = 0x010A,
     LR11XX_REGMEM_CLEAR_RXBUFFER_OC      = 0x010B,
@@ -186,27 +182,6 @@ lr11xx_status_t lr11xx_regmem_read_regmem32( const void* context, const uint32_t
     }
 
     return status;
-}
-
-lr11xx_status_t lr11xx_regmem_write_mem8( const void* context, const uint32_t address, const uint8_t* buffer,
-                                          const uint8_t length )
-{
-    uint8_t cbuffer[LR11XX_REGMEM_WRITE_MEM8_CMD_LENGTH];
-
-    lr11xx_regmem_fill_cbuffer_opcode_address( cbuffer, LR11XX_REGMEM_WRITE_MEM8_OC, address );
-
-    return ( lr11xx_status_t ) lr11xx_hal_write( context, cbuffer, LR11XX_REGMEM_WRITE_MEM8_CMD_LENGTH, buffer,
-                                                 length );
-}
-
-lr11xx_status_t lr11xx_regmem_read_mem8( const void* context, const uint32_t address, uint8_t* buffer,
-                                         const uint8_t length )
-{
-    uint8_t cbuffer[LR11XX_REGMEM_READ_MEM8_CMD_LENGTH];
-
-    lr11xx_regmem_fill_cbuffer_opcode_address_length( cbuffer, LR11XX_REGMEM_READ_MEM8_OC, address, length );
-
-    return ( lr11xx_status_t ) lr11xx_hal_read( context, cbuffer, LR11XX_REGMEM_READ_MEM8_CMD_LENGTH, buffer, length );
 }
 
 lr11xx_status_t lr11xx_regmem_write_buffer8( const void* context, const uint8_t* buffer, const uint8_t length )

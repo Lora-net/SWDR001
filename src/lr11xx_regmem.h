@@ -110,42 +110,6 @@ lr11xx_status_t lr11xx_regmem_read_regmem32( const void* context, const uint32_t
                                              const uint8_t length );
 
 /*!
- * @brief Write bytes into register memory space of LR11XX.
- *
- * A byte is 8-bit long. The writing operations write contiguously in register memory, starting at the address provided.
- *
- * @param [in] context Chip implementation context
- * @param [in] address The register memory address to start writing operation
- * @param [in] data The buffer of bytes to write into memory. Its size must be enough to contain length bytes
- * @param [in] length Number of bytes to write into memory
- *
- * @returns Operation status
- *
- * @see lr11xx_regmem_read_mem8
- */
-lr11xx_status_t lr11xx_regmem_write_mem8( const void* context, const uint32_t address, const uint8_t* buffer,
-                                          const uint8_t length );
-
-/*!
- * @brief Read bytes into register memory space of LR11XX.
- *
- * A byte is 8-bit long. The reading operations read contiguously from register memory, starting at the address
- * provided.
- *
- * @param [in] context Chip implementation context
- * @param [in] address The register memory address to start reading operation
- * @param [in] length Number of bytes to read from memory
- * @param [in] buffer Pointer to a byte array to be filled with content from memory. Its size must be enough to contain
- * at least length bytes
- *
- * @returns Operation status
- *
- * @see lr11xx_regmem_write_mem8
- */
-lr11xx_status_t lr11xx_regmem_read_mem8( const void* context, const uint32_t address, uint8_t* buffer,
-                                         const uint8_t length );
-
-/*!
  * @brief Write bytes into radio TX buffer memory space of LR11XX.
  *
  * @param [in] context Chip implementation context

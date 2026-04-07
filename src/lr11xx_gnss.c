@@ -239,6 +239,8 @@ static uint16_t lr11xx_gnss_get_min_from_operand_and_max_nb_of_blocks( uint16_t 
  */
 static lr11xx_status_t lr11xx_gnss_get_almanac_address_size( const void* context, uint32_t* address, uint16_t* size );
 
+static void lr11xx_gnss_uint32_to_uint8_array( uint32_t value, uint8_t array[4], bool is_lsb_first );
+
 /*
  * -----------------------------------------------------------------------------
  * --- PUBLIC FUNCTIONS DEFINITION ---------------------------------------------
@@ -361,16 +363,33 @@ lr11xx_status_t lr11xx_gnss_get_almanac_age_for_satellite( const void* context, 
         return status_get_almanac_address_size;
     }
 
-    const uint16_t offset_almanac_date                               = sv_id * LR11XX_GNSS_SINGLE_ALMANAC_READ_SIZE + 1;
-    uint8_t        raw_almanac_date[LR11XX_GNSS_ALMANAC_DATE_LENGTH] = { 0 };
+    const uint16_t offset_almanac_date = sv_id * LR11XX_GNSS_SINGLE_ALMANAC_READ_SIZE + 1u;
 
-    const lr11xx_status_t status_read_mem = lr11xx_regmem_read_mem8(
-        context, almanac_base_address + offset_almanac_date, raw_almanac_date, LR11XX_GNSS_ALMANAC_DATE_LENGTH );
+    const uint32_t almanac_date_unaligned_base_address = almanac_base_address + offset_almanac_date;
+
+    // Get the first 4-byte aligned address to read
+    const uint32_t almanac_date_aligned_base_address = ( almanac_date_unaligned_base_address / 4 ) * 4;
+
+    // Offset of first almanac age byte from word aligned read
+    const uint32_t offset_almanac_age_from_4_byte_aligned =
+        almanac_date_unaligned_base_address % almanac_date_aligned_base_address;
+
+    // Determine if there should be 1 or 2 words to read
+    const uint8_t n_words_read = ( offset_almanac_age_from_4_byte_aligned >= 3 ) ? 2 : 1;
+
+    // Raw array containing up to 8 bytes read from the chip from 4-byte memory aligned
+    uint8_t  raw_almanac_date[8]      = { 0 };
+    uint32_t raw_word_almanac_date[2] = { 0 };
+
+    const lr11xx_status_t status_read_mem =
+        lr11xx_regmem_read_regmem32( context, almanac_date_aligned_base_address, raw_word_almanac_date, n_words_read );
     if( status_read_mem == LR11XX_STATUS_OK )
     {
-        // Note: the memory on LR11XX is LSB first. As the 2-byte wide almanac age is obtained by calling the _mem8, the
-        // conversion to uint16_t here is done LSB first
-        ( *almanac_age ) = ( ( ( uint16_t ) raw_almanac_date[1] ) << 8 ) + ( ( ( uint16_t ) raw_almanac_date[0] ) );
+        lr11xx_gnss_uint32_to_uint8_array( raw_word_almanac_date[0], raw_almanac_date, true );
+        lr11xx_gnss_uint32_to_uint8_array( raw_word_almanac_date[1], raw_almanac_date + 4, true );
+
+        ( *almanac_age ) = ( ( ( uint16_t ) raw_almanac_date[offset_almanac_age_from_4_byte_aligned + 1] ) << 8u ) +
+                           ( ( ( uint16_t ) raw_almanac_date[offset_almanac_age_from_4_byte_aligned] ) );
     }
     return status_read_mem;
 }
@@ -1328,6 +1347,24 @@ uint32_t lr11xx_gnss_uint8_to_uint32( uint8_t value[4] )
 {
     return ( ( ( uint32_t ) value[0] ) << 24 ) + ( ( ( uint32_t ) value[1] ) << 16 ) +
            ( ( ( uint32_t ) value[2] ) << 8 ) + ( ( ( uint32_t ) value[3] ) );
+}
+
+void lr11xx_gnss_uint32_to_uint8_array( uint32_t value, uint8_t array[4], bool is_lsb_first )
+{
+    if( is_lsb_first )
+    {
+        array[3] = ( uint8_t ) ( value >> 24 );
+        array[2] = ( uint8_t ) ( value >> 16 );
+        array[1] = ( uint8_t ) ( value >> 8 );
+        array[0] = ( uint8_t ) value;
+    }
+    else
+    {
+        array[0] = ( uint8_t ) ( value >> 24 );
+        array[1] = ( uint8_t ) ( value >> 16 );
+        array[2] = ( uint8_t ) ( value >> 8 );
+        array[3] = ( uint8_t ) value;
+    }
 }
 
 uint16_t lr11xx_gnss_get_min_from_operand_and_max_nb_of_blocks( uint16_t operand )

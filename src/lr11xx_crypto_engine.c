@@ -54,7 +54,6 @@
 #define LR11XX_CRYPTO_FW_IMAGE_DATA_MAX_LENGTH_UINT8 ( LR11XX_CRYPTO_FW_IMAGE_DATA_MAX_LENGTH_UINT32 * 4 )
 #define LR11XX_CRYPTO_MAX_JOIN_ACCEPT_DATA_SIZE ( 32 )
 
-#define LR11XX_CRYPTO_SELECT_CMD_LENGTH ( 2 + 1 )
 #define LR11XX_CRYPTO_SET_KEY_CMD_LENGTH ( 2 + 17 )
 #define LR11XX_CRYPTO_DERIVE_KEY_CMD_LENGTH ( 2 + 18 )
 #define LR11XX_CRYPTO_PROCESS_JOIN_ACCEPT_CMD_LENGTH ( 2 + 3 + 12 + LR11XX_CRYPTO_MAX_JOIN_ACCEPT_DATA_SIZE )
@@ -79,7 +78,6 @@
  */
 enum
 {
-    LR11XX_CRYPTO_SELECT_OC                              = 0x0500,
     LR11XX_CRYPTO_SET_KEY_OC                             = 0x0502,
     LR11XX_CRYPTO_DERIVE_KEY_OC                          = 0x0503,
     LR11XX_CRYPTO_PROCESS_JOIN_ACCEPT_OC                 = 0x0504,
@@ -134,18 +132,6 @@ static uint8_t lr11xx_crypto_get_min_from_operand_and_max_block_size( uint32_t o
  * -----------------------------------------------------------------------------
  * --- PUBLIC FUNCTIONS DEFINITION ---------------------------------------------
  */
-
-lr11xx_status_t lr11xx_crypto_select( const void* context, const lr11xx_crypto_element_t element )
-{
-    uint8_t cbuffer[LR11XX_CRYPTO_SELECT_CMD_LENGTH] = { 0x00 };
-
-    cbuffer[0] = ( uint8_t ) ( LR11XX_CRYPTO_SELECT_OC >> 8 );
-    cbuffer[1] = ( uint8_t ) ( LR11XX_CRYPTO_SELECT_OC >> 0 );
-
-    cbuffer[2] = element;
-
-    return ( lr11xx_status_t ) lr11xx_hal_write( context, cbuffer, LR11XX_CRYPTO_SELECT_CMD_LENGTH, 0, 0 );
-}
 
 lr11xx_status_t lr11xx_crypto_set_key( const void* context, lr11xx_crypto_status_t* status, const uint8_t key_id,
                                        const lr11xx_crypto_key_t key )
